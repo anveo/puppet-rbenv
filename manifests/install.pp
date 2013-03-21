@@ -24,8 +24,20 @@ define rbenv::install(
     creates => $root_path,
     path    => ['/usr/bin', '/usr/sbin'],
     timeout => 100,
-    cwd => $home_path,
-    require => Package['git'],
+    cwd     => $home_path,
+    require => Package['git']
+  }
+
+  exec { "rbenv::update ${user}":
+    command   => "git checkout master && git pull --rebase && git checkout v0.4.0",
+    user      => $user,
+    group     => $group,
+    #path      => ['/usr/bin', '/usr/sbin'],
+    path      => ["/bin", "/usr/bin", "/usr/sbin"],
+    timeout   => 100,
+    cwd       => $root_path,
+    require   => Exec["rbenv::checkout ${user}"],
+    logoutput => true
   }
 
   file { "rbenv::rbenvrc ${user}":
