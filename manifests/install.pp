@@ -37,7 +37,7 @@ define rbenv::install(
     timeout   => 100,
     cwd       => $root_path,
     require   => Exec["rbenv::checkout ${user}"],
-    logoutput => true
+    logoutput => false
   }
 
   file { "rbenv::rbenvrc ${user}":
